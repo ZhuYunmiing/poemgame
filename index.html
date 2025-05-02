@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>古诗猜谜游戏</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>古诗猜谜游戏</h1>
+  <div>
+    <label>随机种子：<input id="seedInput" type="number" placeholder="留空则随机"></label>
+    <button onclick="startGame()">开始游戏</button>
+  </div>
+  <div id="gameArea">
+    <p id="info"></p>
+    <div>
+      <input id="guessInput" type="text" placeholder="输入猜测，去除标点自动处理" style="width:300px;font-size:18px;">
+      <button onclick="submitGuess()">提交</button>
+    </div>
+    <div id="guesses"></div>
+  </div>
+
+  <script src="poem_game.js"></script>
+</body>
+</html>

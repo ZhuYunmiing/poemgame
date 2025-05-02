@@ -1,0 +1,37 @@
+body {
+    font-family: 'KaiTi', serif;
+    background-color: #f4f4f9;
+    text-align: center;
+    padding: 20px;
+  }
+  .guess-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
+  }
+  .char-box {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    margin: 2px;
+  }
+  .correct {
+    background-color: green;
+    color: white;
+  }
+  .present {
+    background-color: goldenrod;
+    color: white;
+  }
+  .absent {
+    background-color: lightgray;
+  }
+  #gameArea {
+    display: none;
+    margin-top: 20px;
+  }
+  
