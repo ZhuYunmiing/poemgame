@@ -1,25 +1,25 @@
-let poems5 = new Set();  // 使用 Set 存储诗句库
-let poems7 = new Set();  // 使用 Set 存储诗句库
-let bigPoems5 = new Set();  // 使用 Set 存储大语料库
-let bigPoems7 = new Set();  // 使用 Set 存储大语料库
+let poems5 = [];  // 高频题库（5字）
+let poems7 = [];  // 高频题库（7字）
+let bigPoems5 = [];  // 大语料库（5字）
+let bigPoems7 = [];  // 大语料库（7字）
 let poemsLoaded = false;
-let bigPoemsLoaded = false;  // 标记大语料库是否加载完成
+let bigPoemsLoaded = false;
 
 let answer, answerChars, expectedLen, attempts, seed;
 
 async function loadPoems() {
-  if (poemsLoaded && bigPoemsLoaded) return;  // 如果题库和大语料库都已加载，则不重复加载
+  if (poemsLoaded && bigPoemsLoaded) return;
   try {
     const [res5, res7, bigRes5, bigRes7] = await Promise.all([
       fetch('poems5.txt'),
       fetch('poems7.txt'),
-      fetch('bigPoems5.txt'),  // 加载大语料库
-      fetch('bigPoems7.txt')   // 加载大语料库
+      fetch('bigPoems5.txt'),
+      fetch('bigPoems7.txt')
     ]);
-    poems5 = new Set((await res5.text()).split('\n').map(l => l.trim()).filter(l => l.length === 10));
-    poems7 = new Set((await res7.text()).split('\n').map(l => l.trim()).filter(l => l.length === 14));
-    bigPoems5 = new Set((await bigRes5.text()).split('\n').map(l => l.trim()).filter(l => l.length === 10));
-    bigPoems7 = new Set((await bigRes7.text()).split('\n').map(l => l.trim()).filter(l => l.length === 14));
+    poems5 = (await res5.text()).split('\n').map(l => l.trim()).filter(l => l.length === 10);
+    poems7 = (await res7.text()).split('\n').map(l => l.trim()).filter(l => l.length === 14);
+    bigPoems5 = (await bigRes5.text()).split('\n').map(l => l.trim()).filter(l => l.length === 10);
+    bigPoems7 = (await bigRes7.text()).split('\n').map(l => l.trim()).filter(l => l.length === 14);
     poemsLoaded = true;
     bigPoemsLoaded = true;
     console.log("题库和大语料库加载完成");
@@ -43,7 +43,7 @@ function startGame() {
 
   const rng = mulberry32(seed);
   const pool = rng() < 0.5 ? poems5 : poems7;
-  answer = [...pool][Math.floor(rng() * pool.size)];  // 从 Set 中选择谜底
+  answer = pool[Math.floor(rng() * pool.length)];
   answerChars = answer.split('');
   expectedLen = answerChars.length;
 
@@ -59,7 +59,8 @@ function clean(input) {
 function submitGuess() {
   const raw = document.getElementById('guessInput').value;
   const guessClean = clean(raw);
-  const pool = expectedLen === 14 ? poems7 : poems5;
+  const is7 = expectedLen === 14;
+  const pool = is7 ? poems7 : poems5;
 
   if (guessClean.length !== expectedLen) {
     alert(`输入字数不符，需要 ${expectedLen} 字，请重新输入`);
@@ -67,10 +68,10 @@ function submitGuess() {
   }
 
   let guess = guessClean;
-  if (!pool.has(guess)) {
-    // 如果在高频题库中没有找到，查找大语料库
-    const bigPool = expectedLen === 14 ? bigPoems7 : bigPoems5;
-    const best = [...bigPool].reduce((prev, curr) =>
+  if (!pool.includes(guess)) {
+    // 不在题库中，查大语料库找最近的
+    const bigPool = is7 ? bigPoems7 : bigPoems5;
+    const best = bigPool.reduce((prev, curr) =>
       levenshtein(guess, curr) < levenshtein(guess, prev) ? curr : prev
     );
     if (confirm(`未找到该句，是否使用最接近的：\n${best}`)) {
