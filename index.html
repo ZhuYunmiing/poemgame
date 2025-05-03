@@ -2,6 +2,7 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>古诗猜谜游戏</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -14,10 +15,10 @@
   <div id="gameArea">
     <p id="info"></p>
     <div>
-      <input id="guessInput" type="text" placeholder="输入猜测，去除标点自动处理" style="width:300px;font-size:18px;">
+      <input id="guessInput" type="text" placeholder="输入猜测，去除标点自动处理">
       <button onclick="submitGuess()">提交</button>
     </div>
-    <div id="guesses" style="margin-top:10px;"></div>
+    <div id="guesses"></div>
   </div>
 
   <script src="script.js"></script>
